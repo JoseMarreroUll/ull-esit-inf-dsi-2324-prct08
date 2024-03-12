@@ -1,0 +1,6 @@
+{
+  "entryPoints": [
+    "./src/dsikea/*.ts"
+  ],
+  "out": "./docs"
+}
