@@ -32,52 +32,52 @@ describe('EventObservable', () => {
     observable.subscribe(observer_number2);
     observable.subscribe(observer_number3);
     const event: Event<number> = { name: 'evento numérico', data: 100 };
-    observable.onEvent(event);
-    expect(observable).to.be.instanceOf(EventObservable);
+    const message = observable.onEvent(event);
+    expect(message).to.be.eql('Received event evento numérico with data: 100');
   });
   
-    it('Debería notificar a 3 observer de tipo string, un evento observable de tipo string', () => {
-      const observable = new EventObservable<string>();
-      observable.subscribe(observer_string1);
-      observable.subscribe(observer_string2);
-      observable.subscribe(observer_string3);
-      const event: Event<string> = { name: 'evento string', data: 'hola' };
-      observable.onEvent(event);
-      expect(observable).to.be.instanceOf(EventObservable);
-    });
+  it('Debería notificar a 3 observer de tipo string, un evento observable de tipo string', () => {
+    const observable = new EventObservable<string>();
+    observable.subscribe(observer_string1);
+    observable.subscribe(observer_string2);
+    observable.subscribe(observer_string3);
+    const event: Event<string> = { name: 'evento string', data: 'hola' };
+    const message = observable.onEvent(event);
+    expect(message).to.be.eql('Received event evento string with data: hola');
+  });
 
-    it('Debería notificar a 3 observer de tipo number[], un evento observable de tipo number[]', () => {
-      const observable = new EventObservable<number[]>();
-      observable.subscribe(observer_array_number1);
-      observable.subscribe(observer_array_number2);
-      observable.subscribe(observer_array_number3);
-      const event: Event<number[]> = { name: 'evento array de números', data: [1, 2, 3] };
-      observable.onEvent(event);
-      expect(observable).to.be.instanceOf(EventObservable);
-    });
+  it('Debería notificar a 3 observer de tipo number[], un evento observable de tipo number[]', () => {
+    const observable = new EventObservable<number[]>();
+    observable.subscribe(observer_array_number1);
+    observable.subscribe(observer_array_number2);
+    observable.subscribe(observer_array_number3);
+    const event: Event<number[]> = { name: 'evento array de números', data: [1, 2, 3] };
+    const message = observable.onEvent(event);
+    expect(message).to.be.eql('Received event evento array de números with data: 1,2,3');
+  });
 
-    it('Debería desuscribir a un observer de tipo number', () => {
-      const observable = new EventObservable<number>();
-      observable.subscribe(observer_number1);
-      observable.subscribe(observer_number2);
-      observable.subscribe(observer_number3);
-      observable.unsubscribe(observer_number2);
-      const event: Event<number> = { name: 'evento numérico', data: 100 };
-      observable.notify(event);
-      expect(observable).to.be.instanceOf(EventObservable);
-    });
+  it('Debería desuscribir a un observer de tipo number', () => {
+    const observable = new EventObservable<number>();
+    observable.subscribe(observer_number1);
+    observable.subscribe(observer_number2);
+    observable.subscribe(observer_number3);
+    observable.unsubscribe(observer_number2);
+    const event: Event<number> = { name: 'evento numérico', data: 100 };
+    observable.notify(event);
+    expect(observable.observers.length).to.be.eql(2);
+  });
 
-    it('Debería dar error al desuscribir un observer que no está suscrito', () => {
-      const observable = new EventObservable<string>();
-      observable.subscribe(observer_string1);
-      observable.subscribe(observer_string2);
-      expect(() => observable.unsubscribe(observer_string3)).to.throw('Este Observer no ha sido suscrito');
-    });
+  it('Debería dar error al desuscribir un observer que no está suscrito', () => {
+    const observable = new EventObservable<string>();
+    observable.subscribe(observer_string1);
+    observable.subscribe(observer_string2);
+    expect(() => observable.unsubscribe(observer_string3)).to.throw('Este Observer no ha sido suscrito');
+  });
 
-    it('Debería dar error al suscribir un observer que ya está suscrito', () => {
-      const observable = new EventObservable<number[]>();
-      observable.subscribe(observer_array_number1);
-      observable.subscribe(observer_array_number2);
-      expect(() => observable.subscribe(observer_array_number2)).to.throw('Este Observer ya está suscrito');
-    });
+  it('Debería dar error al suscribir un observer que ya está suscrito', () => {
+    const observable = new EventObservable<number[]>();
+    observable.subscribe(observer_array_number1);
+    observable.subscribe(observer_array_number2);
+    expect(() => observable.subscribe(observer_array_number2)).to.throw('Este Observer ya está suscrito');
+  });
 });
